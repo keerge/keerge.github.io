@@ -6,50 +6,18 @@ on:
      - docs
 
 jobs:
- deploy:
-   runs-on: ubuntu-latest
-
-   steps:
-     - name: Checkout repository
-       uses: actions/checkout@v2
-
-     - name: Build and deploy
-       env:
-          HEXO_DEPLOY_PRI: ${{secrets.TOKEN}}
-       run: |
-         TARGET_REPOSITORY=${GITHUB_REPOSITORY}
-         REPOSITORY_PATH="https://x-access-token:${HEXO_DEPLOY_PRI}@github.com/${TARGET_REPOSITORY}.git"
-         echo ">_ Start REPOSITORY_PATH： ${REPOSITORY_PATH}"
-         TARGET_BRANCH="gh-pages"
-         npm install
-         npm run build
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v4.3.3
+  build-and-deploy:
+    concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+      - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
+        run: |
+          npm i
+          npm run build
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          repository-name: ${{GITHUB_ACTOR}}/${{GITHUB_REPOSITORY}}
           branch: gh-pages
-          folder:  public
-        #  cd public
-        #  git init
-        #  git config --global user.name "${GITHUB_ACTOR}"
-        #  git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-        #  git config --global --add safe.directory "public"
-
-        #  git remote add origin "${REPOSITORY_PATH}"
-        #  git checkout --orphan "${TARGET_BRANCH}"
-
-        #  git add .
-
-        #  echo '>_ Start Commit ...'
-        #  git commit --allow-empty -m "Build and Deploy from Github Actions"
-
-        #  echo '>_ Start Push ...'
-        #  git push -u origin "${TARGET_BRANCH}" --force
-        #  echo ">_ Deployment successful"
-        #  git init
-        #  git config user.name "{{ github.actor }}"
-        #  git config user.email "{{ github.actor }}@users.noreply.github.com"
-        #  git add .
-        #  git commit -m "Deploy dist"
-        #  git branch -M docs
-        #  git push --force "https://{{github.token}}@github.com/{{github.repository}}" docs:gh-pages
+          folder: public # The folder the action should deploy.
