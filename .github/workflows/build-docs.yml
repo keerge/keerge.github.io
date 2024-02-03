@@ -17,8 +17,6 @@ jobs:
        run: |
          npm install
          npm run build
-         rm -rf dist/*
-         mv public/* dist/
          cd public
          git init
          git config user.name "{{ github.actor }}"
@@ -26,4 +24,4 @@ jobs:
          git add .
          git commit -m "Deploy dist"
          git branch -M docs
-         git push --force "https://{{ github.token }}@github.com/{{ github.repository }}" master:gh-pages
+         git push --force "https://{{ github.token }}@github.com/{{ github.repository }}" docs:gh-pages
