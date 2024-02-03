@@ -14,10 +14,12 @@ jobs:
        uses: actions/checkout@v2
 
      - name: Build and deploy
+       env:
+          HEXO_DEPLOY_PRI: ${{secrets.TOKEN}}
        run: |
 
          TARGET_REPOSITORY=${GITHUB_REPOSITORY}
-         REPOSITORY_PATH="https://x-access-token:${secrets.GENERATE_HEXO_STATIC_FILES}@github.com/${TARGET_REPOSITORY}.git"
+         REPOSITORY_PATH="https://x-access-token:${HEXO_DEPLOY_PRI}@github.com/${TARGET_REPOSITORY}.git"
          TARGET_BRANCH="gh-pages"
          npm install
          npm run build
