@@ -20,6 +20,7 @@ jobs:
 
          TARGET_REPOSITORY=${GITHUB_REPOSITORY}
          REPOSITORY_PATH="https://x-access-token:${HEXO_DEPLOY_PRI}@github.com/${TARGET_REPOSITORY}.git"
+         echo ">_ Start REPOSITORY_PATH： ${REPOSITORY_PATH}"
          TARGET_BRANCH="gh-pages"
          npm install
          npm run build
